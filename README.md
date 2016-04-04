@@ -17,4 +17,3 @@ expressions using part of the matrices, such
 as:
 C(0:99) = D(0:99)+A(0:99);
 
-Compilers Project
