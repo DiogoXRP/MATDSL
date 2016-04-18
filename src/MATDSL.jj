@@ -6,6 +6,8 @@ options
   static = true;
 }
 
+// édesta ???
+
 PARSER_BEGIN(MATDSL)
 
 import java.util.HashMap;
