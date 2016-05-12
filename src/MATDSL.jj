@@ -17,11 +17,12 @@ public class MATDSL
   public static void main(String args []) throws ParseException
   {
     MATDSL parser = new MATDSL(System.in);
-    while (true)
+    parser.OperMat();
+   /* while (true)
     {
       System.out.println("Reading from standard input...");
       System.out.print("Enter an expression like \"1+(2+3)*4;\" :");
-      /*try
+      try
       {
         switch (MATDSL.one_line())
         {
@@ -46,13 +47,16 @@ public class MATDSL
         System.out.println("Oops.");
         System.out.println(e.getMessage());
         break;
-      }*/
-      return;
+      }
+      return;*/
     }
   }
 }
 
 PARSER_END(MATDSL)
+
+void OperMat():{}
+{}
 
 SKIP :
 {
@@ -70,12 +74,7 @@ TOKEN : /* OPERATORS */
 | < TRANSPOSE: "'" >
 | < INVERSE: "-1" >
 | < ADJOINT: "$" >
- 
-}
-
-TOKEN :
-{
-  < INTEGER : ([ "0"-"9" ])+ >	
+|  < INTEGER : ([ "0"-"9" ])+ >	
 | < LF : "\n" >
 | < DOT: "." >
 | < SEMICOLON : ";" >
@@ -86,7 +85,10 @@ TOKEN :
 | < CLOSE_SBRACKET : "]" >
 | < REAL : (< INTEGER >)+ (< DOT >) (<INTEGER >)* >
 | < SYMBOL : [ "A"-"Z", "a"-"z" ]([ "0"-"9", "A"-"Z", "a"-"z" ])* >
-
+| < BEGIN : "/* MATDSL" >
+| < END : "*/" >
+| < INPUT:"Input" >
+| < OUTPUT:"Output" >
 }
 
 /*int one_line() :

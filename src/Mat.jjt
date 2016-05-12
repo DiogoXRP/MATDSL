@@ -1,0 +1,105 @@
+{
+  LOOKAHEAD= 1;
+}
+
+PARSER_BEGIN(Mat)
+
+public class Mat{
+  public static void main(String args []) throws ParseException  {
+
+    Mat matrix = new Mat(System.in);
+    SimpleNode root = matrix.Exp();
+
+    root.dump();
+  }
+}
+
+PARSER_END(Mat)
+
+SKIP:{  " " | "\r" | "\t"}
+
+TOKEN:{  < INTEGER: (["0"-"9"])+ >
+| < PLUS : "+" >
+| < MINUS : "-" >
+| < MULTIPLY : "*" >
+| < DIVIDE : "/" >
+| < TRANSPOSE: "'" >
+| < INVERSE: "^" >
+| < ADJOINT: "$" >
+| < LF : "\n" >
+| < DOT: "." >
+| < SEMICOLON : ";" >
+| < COLON : ":" >
+| < OPEN_CBRACKET : "(" >
+| < CLOSE_CBRACKET : ")" >
+| < OPEN_SBRACKET : "[" >
+| < CLOSE_SBRACKET : "]" >
+| < REAL : (< INTEGER >)+ (< DOT >) (<INTEGER >)* >
+| < SYMBOL : [ "A"-"Z", "a"-"z" ]([ "0"-"9", "A"-"Z", "a"-"z" ])* >
+| < BEGIN : "/* MATDSL" >
+| < END : "*/" >
+| < INPUT:"Input" >
+| < OUTPUT:"Output" >
+| < TYPE: ("int"|"double"|"float"|"long"|"short") >
+}
+
+SimpleNode Exp():{}
+{
+    < BEGIN > Code() < END >    {      return jjtThis;    }    }
+
+void Code():{}
+//Alterar para receber varios inputs-----------------------------------------------------{
+  Input() Outexp()}
+
+void Input():{}{
+  < INPUT > < SYMBOL > < COLON > Matrix() < SEMICOLON > }
+
+void Outexp():{}{
+  Output() Outexp() Expression()
+| Output() Expression()
+| < EPS >}
+
+void Output():{}{
+  < OUTPUT > < SYMBOL > < COLON > Matrix() < SEMICOLON >}
+
+void Matrix():{}{
+  < TYPE > < OPEN_SBRACKET > < INTEGER > < CLOSE_SBRACKET > < OPEN_SBRACKET > < INTEGER > < CLOSE_SBRACKET >}
+
+void Expression():{}{
+  Indentifier() < EQUALS > Expr()}
+
+void Expr():{}{
+  Expr2() ExprL()}
+
+void ExprL():{}{
+  < OP1 > Expr2() ExprL()
+| < EPS >}
+
+void Expr2():{}{
+  Term() Expr2L()}
+
+void Expr2L():{}{
+  < OP2 > Term() Expr2L()
+| < EPS >}
+
+void Term():{}{
+  Identifier() TermL()}
+
+void TermL():{}{
+  < OP3 > TermL()
+| < EPS >}
+
+void Identifier():{}{
+  < SYMBOL >
+| < SYMBOL > < OPEN_CBRACKET > < INTEGER > < COLON > < INTEGER > < CLOSE_CBRACKET >  }
+
+
+
+
+
+
+
+
+
+
+
