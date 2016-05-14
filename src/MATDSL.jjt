@@ -2,19 +2,22 @@
   LOOKAHEAD= 1;
 }
 
-PARSER_BEGIN(Mat)
+PARSER_BEGIN(MATDSL)
 
-public class Mat{
+import java.util.HashMap;
+
+public class MATDSL{
+  private static HashMap < String, double[][] > Vars = new HashMap < String, double[][] > ();
   public static void main(String args []) throws ParseException  {
 
-    Mat matrix = new Mat(System.in);
+    MATDSL matrix = new MATDSL(System.in);
     SimpleNode root = matrix.Exp();
 
     root.dump();
   }
 }
 
-PARSER_END(Mat)
+PARSER_END(MATDSL)
 
 SKIP:{  " " | "\r" | "\t"}
 
@@ -46,6 +49,19 @@ TOKEN:{  < INTEGER: (["0"-"9"])+ >
 SimpleNode Exp():{}
 {
     < BEGIN > Code() < END >    {      return jjtThis;    }    }
+
+void SaveValues() #void:{
+  Token variable, equalSymbol, value;}
+{
+  variable = < SYMBOL >
+  equalSymbol = "="
+  value = double[][];
+  {    < TYPE >[][] newValue = Vars.get(variable.image);
+    if (newValue == null)    {
+      Vars.put(variable.image, value.image);    }
+    else
+    {
+      System.out.println("Variable '" + variable.image + "' already defined with value " + newValue);    }  }
 
 void Code():{}
 //Alterar para receber varios inputs-----------------------------------------------------{
